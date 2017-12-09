@@ -3,10 +3,13 @@ body {
     width: 70%;
 }
 nav ul, footer ul {
-    font-family:'Helvetica', 'Arial', 'Sans-Serif';
+    font: normal 18px "Avenir Next", Helvetica, Arial, sans-serif;
+    margin: 0px;
     padding: 0px;
     list-style: none;
     font-weight: bold;
+    color: #4c4c4c;
+    background-color: #f5f5f5;
 }
 nav ul li, footer ul li {
     display: inline;
