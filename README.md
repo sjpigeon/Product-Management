@@ -1,6 +1,15 @@
-## Welcome to GitHub Pages
+## Welcome
 
-You can use the [editor on GitHub](https://github.com/sjpigeon/Product-Management/edit/master/README.md) to maintain and preview the content for your website in Markdown files.
+A collection of Product Management deliverables:
+
+[Monitoring] - (https://github.com/sjpigeon/Product-Management/Monitoring) - As an application team, I need an automated solution that enables monitoring of cloud-based resources so that I'm enabled to create custom dashboards, reports and alerts and respond in a way that reflects the needs of my customer.
+
+
+
+
+
+
+
 
 Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
 
