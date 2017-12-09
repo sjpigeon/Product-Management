@@ -1,3 +1,4 @@
 name: Scott Pigeon, Product Manager
 markdown: kramdown
+highlighter: rouge
 theme: jekyll-theme-slate
