@@ -14,9 +14,9 @@
 - DevOps delivery of standardized monitoring for all application teams.
 - Monitoring across the entire stack - from the hypervisor and host through the container and to the application itself.
 - With monitoring enabled across the entire stack, metrics are gathered and teams can use reports to evaluate the performance of their software via:  
- - Using default dashboards, provided out-of-the box.   
- - Creating customized dashboards - edit the existing dashboard or create a new dashboard to focus on specific metrics.
- - Creating alerts - proactively set resource thresholds and configure notifications (email, IM, etc).
+  - Using default dashboards, provided out-of-the box.   
+  - Creating customized dashboards - edit the existing dashboard or create a new dashboard to focus on specific metrics.
+  - Creating alerts - proactively set resource thresholds and configure notifications (email, IM, etc).
 
 ### **What is the capability?**
 - Full-stack monitoring occurs at three levels account, container and application. 
@@ -53,4 +53,4 @@
    - NOD32 Antivirus
    - Tivoli BigFix BES
  - Enable metrics collection by Datadog at the application-level using automation:  
-  - Terraform sample code - Won't Fix as teams are using New Relic for APM.
+   - Terraform sample code - Won't Fix as teams are using New Relic for APM.
