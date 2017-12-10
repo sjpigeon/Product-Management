@@ -1,46 +1,15 @@
 ## Welcome
 
-A collection of Product Management deliverables:
+### A collection of Product Management deliverables:
 
-[Monitoring](https://github.com/sjpigeon/Product-Management/Monitoring) - As an application team, I need an automated solution that enables monitoring of cloud-based resources so that I'm enabled to create custom dashboards, reports and alerts and respond in a way that reflects the needs of my customer.
+[Monitoring](https://github.com/sjpigeon/Product-Management/Monitoring.md) - As an application team, I need an automated solution that enables monitoring of cloud-based resources so that I'm enabled to create custom dashboards, reports and alerts and respond in a way that reflects the needs of my customer.
 
-[Secrets Management](https://github.com/sjpigeon/Product-Management/Secrets-Management) - 
+[Secrets Management](https://github.com/sjpigeon/Product-Management/Secrets-Management.md) - 
 
-[Blue-Green Deployment](https://github.com/sjpigeon/Product-Management/Blue-Green) -
-
-
+[Blue-Green Deployment](https://github.com/sjpigeon/Product-Management/Blue-Green.md) -
 
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
-
-### Markdown
-
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
-
-```markdown
-Syntax highlighted code block
-
-# Header 1
-## Header 2
-### Header 3
-
-- Bulleted
-- List
-
-1. Numbered
-2. List
-
-**Bold** and _Italic_ and `Code` text
-
-[Link](url) and ![Image](src)
-```
-
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
 
 ### Jekyll Themes
 
 Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/sjpigeon/Product-Management/settings). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
-
-### Support or Contact
-
-Having trouble with Pages? Check out our [documentation](https://help.github.com/categories/github-pages-basics/) or [contact support](https://github.com/contact) and we’ll help you sort it out.
