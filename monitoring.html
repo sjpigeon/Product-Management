@@ -1,1 +1,57 @@
+---
+layout: default
+title: Scott Pigeon
+---
+<div class="collection">
+	
+	<h2><b>Monitoring Epic</b></h2>
+	<p><b>Narrative</b> - As an application team, I need an automated solution that enables monitoring of cloud-based resources so that I'm enabled to create custom dashboards, reports and alerts and respond in a way that reflects the needs of my customer.</p>
+	
+	<p><b>Requirements:</b> 
+	<ul><li>Datadog reference - https://docs.datadoghq.com/integrations/aws/</li></ul>
+	<li>Enable Account-level and Container-level monitoring with DataDog:</li>
+	<ul><li>Get with Security Team to approve creation/enablement of the DatadogAWSIntegration role.</li></ul>
+	<ul><li>The Turbot team/product will not create the role by default, nor will they implement at this time.</li></ul>
+	<ul><li>Create the DataDogIntegrationRole, build a script that can iterate through each existing Turbot account to create the DatadogAWSIntegration role and applies the Datadog Managed Policy.</li></ul>
+	<ul><li>Successfully run the DataDogIntegrationRole script on each existing MHE AWS account.</li></ul>
+	<ul><li>Append the AWS Account On-boarding process to include running of this Datadog script on newly provisioned AWS accounts. This means that any team requesting/obtaining a new AWS account will have Datadog enabled.</li></ul>
+	
+	
+	<li>Enable Host-level monitoring with DataDog:</li>
+	<ul>
+	<li>Enable Datapipe monitoring by installing necessary agents.</li>
+	<li>Write documentation describing how application teams can implement.</li></ul>	
+	
+	<p><b>Acceptance Criteria:</b>
+	<ul><li>Security has approved of creation/enablement of DatadogAWSIntegration role.</li></ul>
+	<ul><li>The 'DataDogIntegration' script runs successfully in each Turbot account, enabling collection of metrics for the specified services.</li></ul>
+	<ul><li>Verify that metrics are being displayed in the Datadog dashboard (default view).</li></ul>
 
+	<br>
+	<h2><b>Solutioning:</b></h2>
+	<p>This feature was effectively an Executive Leadership Team mandate versus a customer request. To faciliate usage across a broad array of customers, the following Principles were created and evangelized to enable thought exercises by customers as they implemented the feature by consuming metrics through DataDog.</p> 
+	<h3><b>Monitoring Principles</b></h3>
+	<li>No gaps. This means:</li>
+	<ul><li>Enabling the monitoring system to report on all supported metrics made available by the platform. </li></ul>
+	<ul><li>Enabling a logical separation of the stack into layers (hypervisor, OS/containers/components, application) to provide a clear view of metrics for each layer, allowing visibility into all areas, both problematic and non-problematic.</li></ul>  
+	<ul><li>Hypervisor -> CloudWatch -> cpu/net/io</li></ul>
+	<ul><li>OS/containers/components -> Infrastructure Monitoring -> filesystem/docker mem/docker cpu/db queries/web requests</li></ul>
+	<ul><li>Application -> Application Management -> app throughput</li></ul>
+	
+	<h3><b>Alerting Principles</b></h3>
+	<li>Be Proactive. This means:</li>
+	<ul><li>Define thresholds that demonstrate failure potential, such as memory pressure that will lead to near-term system failure. </li></ul>
+	<ul><li>Send alerts when thresholds are reached.</li></ul>  
+	<ul><li>Send alerts to people (enabled by Tags) that are empowered to take action and prevent/mitigate the failure potential.</li></ul>
+	<ul><li>Define the threshold that was reached, why it was impactful, and actions/mitigations to take (if available).</li></ul>
+	
+	<li>Be Reactive. This means:</li>
+	<ul><li>Send alerts when failures have occured.</li></ul>  
+	<ul><li>Send alerts to people (enabled by Tags) that are empowered to take action and address the failure.</li></ul>
+	<ul><li>Define the failure, why it was impactful, and actions/mitigations to take (if available).</li></ul>
+	
+
+	
+</div><!-- /.collection -->
+
+ 
