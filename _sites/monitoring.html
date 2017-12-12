@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Scott Pigeon</title>
+		<!-- link to main stylesheet -->
+		<link rel="stylesheet" type="text/css" href="/css/main.css">
+	</head>
+
+	<body>
+		<nav>
+    		<ul>
+        		<li><a href="/">Home</a></li>
+				<li><a href="https://www.linkedin.com/in/scott-pigeon-b767514/">LinkedIn</a></li>
+    		</ul>
+		</nav>
+		<div class="container">
+    		<div class="content">
+
+			<div class="content">
+
+	<h1>Monitoring</h1>
+	<p>The intent of this feature was to enable monitoring broadly across AWS resources deployed in Production and non-Production. The crux was defining 'monitoring' and using the tools (DataDog) and processes (DataPipe) within the environment.  
+	
+	<br>
+	<h2>Business Case:</h2>
+		
+	<p><i>What is the customer's strategic benefit?</i>
+	<ul class="b">
+	<li>Standardized monitoring enables reliable and repeatable processes. Application teams can use standardized monitoring to generate a unified view of their entire stack. This enables application teams to optimize their performance and responds in a way that reflects the needs of their customers.</li>
+	</ul>
+
+	<p><i>What is the problem being solved?</i>
+	<ul class="b">
+	<li>The customer does not have a standard for enabling application monitoring for cloud-based resources.</li>
+	</ul>
+
+	<p><i>How will the customer benefit?</i>
+	<ul class="b">
+	<li>DevOps delivery of standardized monitoring for all application teams.</li>
+	<li>Monitoring across the entire stack - from the hypervisor and host through the container and to the application itself.</li>
+	<li>With monitoring enabled across the entire stack, metrics are gathered and teams can use reports to evaluate the performance of their software via:</li> 
+	<ul class="b">	
+	<li>Using default dashboards - provided out-of-the box.</li>
+	<li>Creating customized dashboards - edit the existing dashboard or create a new dashboard to focus on specific metrics.</li>
+	<li>Creating alerts - proactively set resource thresholds and configure notifications (email, IM, etc).</li>
+	</ul>
+	</ul> 
+
+	<p><i>What is the capability?</i>
+	<ul class="b">
+	<li>Full-stack monitoring occurs at three levels account, container and application.</li>
+	<ul class="b">	
+	<li>Account-level monitoring will be enabled by DevOps engineering via automation with zero work done by application teams. Specifically, this is monitoring at the virtual host level (hypervisor, OS).</li>
+	<li>Container-level monitoring will be enabled by DevOps via 'sample' code. This code provides automated agent installation for a container and is intended to be modified by application teams for use with their specific AWS infrastructure (account ID, credentials, etc) to enable monitoring at the container-level (OS, container, application). Ex:</li>
+	<ul class="b">	
+	<li>Cluster Utilization Metrics</li>
+	<li>Cluster Reservation Metrics</li>
+	<li>Service Utilization Metrics</li>
+	</ul>
+	<li>Application-level monitoring will be enabled by DevOps via documentation. This enables instrumentation of the application to send custom metrics to a monitoring service.</ul>
+	</ul>
+	
+	<p><i>What are we doing?</i>
+	<ul class="b">	
+	<li>For the Account-level, DevOps is creating automation, process and documentation for:</li>
+	<ul class="b">
+	<li>Updating existing Turbot AWS accounts to enable monitoring.</li>
+	<li>Provisioning new Turbot AWS accounts during the on-boarding process to enable monitoring.</li>
+	</ul>
+	<li>For the Container-level, DevOps is creating sample code and documentation for application teams.</li>
+	<li>For the Application-level, DevOps is creating sample code and documentation for application teams.</li>
+	</ul>
+	
+	<p><i>How are we doing it?</i>
+	<ul class="b">
+	<li><a href="https://www.datadoghq.com/product/">DataDog</a> is a monitoring service for cloud-scale applications, bringing together data from servers, databases, tools, and services to present a unified view of an entire stack. These capabilities are provided on a SaaS-based data analytics platform.</li>
+	<li>Enable metrics collection by Datadog at the account-level using automation:</li>
+	<ul class="b">
+	<li>Build script to create DataDogAWSIntegration role and apply DataDogAWSIntegrationPolicy</li>
+	<li>Build script to enable cross-account access</li>
+	<li>Build script to be robust and aware of existing role/policy</li>
+	</ul>
+	<li>Enable updates outside of provisioning process:</li>
+	<ul class="b">
+	<li>Build script to be robust and aware of existing role/policy</li>
+	<li>Create Jenkins job to enable manual initiation of script for accounts that aren't provisioned with DD</li>
+	</ul>
+	<li>Enable metrics collection by Datadog at the container-level using automation:</li>
+	<ul class="b">
+	<li>Create and publish sample Terraform that configures DD for ECS</li>
+	</ul>
+	<li>Enable metrics collection by Datadog at the host-level using automation:</li>
+	<ul class="b">
+	<li>Automated install of DD Agent via User Data for all supported OS's</li>
+	</ul>
+	<li>Enable metrics collection by Datadog at the application-level using automation:</li>
+	<ul class="b">
+	<li>Create and publish sample Terraform <em>**won't fix as team are moving to New Relic**</em></li>	
+	</ul>
+
+
+
+	
+	</ul>
+
+	
+
+	
+	
+	<br>
+	<h2>Solutioning:</h2>
+	
+	<p>This feature was an Executive Leadership Team mandate versus a customer request. Therefore, Principles were developed, in lieu of a customer, to generate requirements and to enable thought exercises by customers as they implemented the feature by consuming metrics through DataDog.</p> 
+
+	<p><b>Monitoring Principles</b></p>
+	<ul class="b">
+	<li>No gaps. This means:</li>
+	<ul class="b">
+	<li>Enabling the monitoring system to report on all supported metrics made available by the platform. </li>
+	<li>Enabling a logical separation of the stack into layers (hypervisor, OS/containers/components, application) to provide a clear view of metrics for each layer, allowing visibility into all areas, both problematic and non-problematic.</li>	
+	<li>Hypervisor -> CloudWatch -> cpu/net/io</li>
+	<li>OS/containers/components -> Infrastructure Monitoring -> filesystem/docker mem/docker cpu/db queries/web requests</li>
+	<li>Application -> Application Management -> app throughput</li>
+	</ul>
+	</ul>
+
+	<p><b>Alerting Principles</b></p>
+	<ul class="b">
+	<li>Be Proactive. This means:</li>
+	<ul class="b">
+	<li>Define thresholds that demonstrate failure potential, such as memory pressure that will lead to near-term system failure. </li>
+	<li>Send alerts when thresholds are reached.</li> 
+	<li>Send alerts to people (enabled by Tags) that are empowered to take action and prevent/mitigate the failure potential.</li>
+	<li>Define the threshold that was reached, why it was impactful, and actions/mitigations to take (if available).</li>
+	</ul>
+	<li>Be Reactive. This means:</li>
+	<ul class="b">
+	<li>Send alerts when failures have occured.</li>  
+	<li>Send alerts to people (enabled by Tags) that are empowered to take action and address the failure.</li>
+	<li>Define the failure, why it was impactful, and actions/mitigations to take (if available).</li>
+	</ul>
+	</ul>
+	
+	<br>
+	<h2>Agile:</h2>	
+		
+	<p><b>Narrative</b> - As an application team, I need an automated solution that enables monitoring of cloud-based resources so that I'm enabled to create custom dashboards, reports and alerts and respond in a way that reflects the needs of my customer.</p>
+	
+	<p><b>Requirements:</b></p> 
+	<ul class="b">
+	<li><a href="https://docs.datadoghq.com/integrations/aws/">DataDog reference</a></li>
+	<li>Enable Account-level and Container-level monitoring with DataDog:</li>
+	<ul class="b">
+	<li>Get with Security Team to approve creation/enablement of the DatadogAWSIntegration role.</li>
+	<li>The Turbot team/product will not create the role by default, nor will they implement at this time.</li>
+	<li>Create the DataDogIntegrationRole, build a script that can iterate through each existing Turbot account to create the DatadogAWSIntegration role and applies the Datadog Managed Policy.</li>
+	<li>Successfully run the DataDogIntegrationRole script on each existing  AWS account.</li>
+	<li>Append the AWS Account On-boarding process to include running of this Datadog script on newly provisioned AWS accounts.</li>
+	<ul class="b">	
+	<li>This means that any team requesting/obtaining a new AWS account will have Datadog enabled.</li>
+	</ul>
+	<li>Enable Host-level monitoring:</li>
+	<ul class="b">	
+	<li>Enable Datapipe monitoring by installing necessary agents.</li>
+	</ul>
+	<li>Write documentation describing how application teams can implement.</li>
+	</ul>
+	</ul>	
+
+	<p><b>Acceptance Criteria:</b></p>
+	<ul class="b">
+	<li>Security has approved of creation/enablement of DatadogAWSIntegration role.</li>
+	<li>The 'DataDogIntegration' script runs successfully in each Turbot account, enabling collection of metrics for the specified services.</li>
+	<li>Verify that metrics are being displayed in the Datadog dashboard (default view).</li>
+	</ul>
+
+
+</div><!-- /.content -->
+
+
+
+ 
+
+    		</div><!-- /.content -->
+		</div><!-- /.container -->
+
+		<footer>
+    		<ul>
+        		<li><a href="mailto:sjpigeon@msn.com">email</a></li>
+			</ul>
+		</footer>
+	</body>
+
+</html>
