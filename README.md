@@ -34,14 +34,6 @@ Solution Design/Workflow:
 Text and diagrams behind the 'what are we doing' and 'how are we doing it' from the development team.
 
 
-Requirements/Scenarios(Prioritized):
 
-[Monitoring](https://github.io/sjpigeon/Product-Management/Monitoring.md)
-
-- As an application team, I need an automated solution that enables monitoring of cloud-based resources so that I'm enabled to create custom dashboards, reports and alerts and respond in a way that reflects the needs of my customer.
-
-[Secrets Management](https://github.com/sjpigeon/Product-Management/Secrets-Management.md) - 
-
-[Blue-Green Deployment](https://github.com/sjpigeon/Product-Management/Blue-Green.md) -
 
 
