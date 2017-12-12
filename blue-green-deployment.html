@@ -1,0 +1,167 @@
+---
+layout: default
+title: Scott Pigeon
+---
+<div class="content">
+
+	<h1>Blue-Green Deployment</h1>
+	<p>The intent of this feature was to enable flexibility in deployments.  
+	
+	<br>
+	<h2>Business Case:</h2>
+		
+	<p><i>What is the customer's strategic benefit?</i></p>
+	<ul class="b">
+	<li>Blue/Green deployments mitigate common risks associated with deploying software, such as downtime and rollback capability. By employing Blue/Green deployments within a CI/CD pipeline, application teams have greater speed and flexibility with which to deploy value to customers while retaining the control to validate application capabilities while throttling it's traffic.</li>
+	</ul>
+
+	<p><i>What is the problem being solved?</i></p>
+	<ul class="b">
+	<li>The customer does not have Blue/Green Deployment capability built-in as a feature of the CI/CD pipeline. This means that CI/CD Teams need to build their own Blue/Green Deployment capability independent of the CI/CD pipeline. This can be done from scratch or customizing sample code (<a href="https://github.com/awslabs/ecs-blue-green-deployment/blob/master/README.md">AWS sample</a>).</li>
+	</ul>
+
+	<p><i>How will the customer benefit?</i></p>
+	<ul class="b">
+	<li>ASSUMPTIONS - in the interest of clarity, in the context of Blue/Green Deployments, the following environments are defined:</li>
+	<li>BLUE: existing production environment that's 'known-good' as it's been operating successfully with production traffic.</li>
+	<li>GREEN: new environment built to accept production traffic.</li>
+	<li>Resource Isolation benefits:</li>
+	<ul class="b">	
+	<li>A new environment (GREEN) with separate resources is created in parallel with the production environment (BLUE)</li>
+	<li>Reduces deployment risks by maintaining the separate BLUE environment versus upgrading the same environment in-place</li>
+	</ul>
+	<li>Canary benefits benefits:</li>
+	<ul class="b">
+	<li>Bring up a new, parallel GREEN environment and run tests</li>
+	<li>Redirect a small fraction of production traffic to the GREEN environment while the vast majority of traffic continues to target the existing BLUE production environment </li>
+	<ul class="b">
+	<li>In other words, the BLUE environment isn't decommissioned immediately after GREEN is up-and-running, BLUE resources are gradually spun down. Also, the code remains in the production pipeline, ready for re-deployment, until another deployment comes through the pipeline and over-writes it</li>
+	</ul>
+	</ul>
+	<li>Roll-back benefits:</li>
+	<ul class="b">
+	<li>Rolling back a deployment from the GREEN environment to the BLUE environment</li>
+	<li>Reduces blast radius/failures to traffic only going to the GREEN environment</li>
+	</ul>
+	<li>Continuous Integration and Continuous Deployment benefits: </li>
+	<ul class="b">
+	<li>Limiting complexity by creating a GREEN environment with separate resources</li>
+	</ul>
+	<li>Cost Optimization benefits:</li>
+	<ul class="b">
+	<li>Adjusting the performance envelope of the application between deployments and spinning up fewer, or different, compute resources</li>
+	<li>Reduce usage of over-provisioned architectures by scaling out a GREEN environment with fewer/smaller resources, redirecting traffic away from the current over-provisioned BLUE environment, and then decommissioning the BLUE environment once the deployment succeeds.</li>
+	</ul>
+	</ul>
+	
+	<p><i>What is the capability?</i></p>
+	<ul class="b">
+	<li>BLUE: existing production environment that's 'known-good' as it's been operating successfully with production traffic.</li>
+	<li>GREEN: new environment built to accept production traffic.</li>
+	<li>Resource Isolation capabilities:</li>
+	<ul class="b">	
+	<li>As part of each deployment, employing the 'infrastructure-as-code' principle and creating/standing a GREEN environment in-parallel with the BLUE environment</li>
+	</ul>
+	<li>Canary benefits capabilities:</li>
+	<ul class="b">
+	<li>Run tests and/or route some production traffic to the GREEN environment</li>
+	</ul>
+	<li>Roll-back capabilities:</li>
+	<ul class="b">
+	<li>Routing production traffic from the GREEN environment to the BLUE environment via ELB</li>
+	</ul>
+	<li>Continuous Integration and Continuous Deployment capabilities: </li>
+	<ul class="b">
+	<li>Creating a separate GREEN environment from the BLUE environment</li>
+	</ul>
+	<li>Cost Optimization capabilities:</li>
+	<ul class="b">
+	<li>Spinning up the GREEN environment with fewer and/or different compute resources</li>
+	<li>Decommissioning the BLUE environment in favor of the GREEN environment</li>
+	</ul>
+	</ul>
+		
+	<p><i>What are we doing?</i></p>
+	<ul class="b">	
+	<li>Publishing Blue/Green Deployment Patterns documentation for reference:</li>
+	<ul class="b">
+	<li>DNS-based service routing</li>
+	<li>Port-based service routing</li>
+	</ul>
+	<li>Sample code to enable Blue/Green deployments.</li>
+	<li>Recorded knowledge share sessions.</li>
+	</ul>
+	
+	<p><i>How are we doing it?</i></p>
+	<ul class="b">
+	<li>Publishing the high-level points of AWS Whitepapers on Blue/Green Deployment implementations.</li>
+	<li>Modifying AWS Sample code for use within MHE, calling out areas of the source where CI/CD Teams will need to add their customizations.</li>
+	</ul>
+	
+	<br>
+	<h2>Solutioning:</h2>
+	<p><i>Problem Statements(Prioritized)</i>
+	<ul class="b">
+	<li>The customer wants/needs a switch to enable flipping between Blue and Green environments that's not dependent upon a code checkin. It might be a button on a page that a TPM pushes to switch customer traffic.</li>
+	</ul>
+	
+	<p><i>Requirements/Scenarios(Prioritized)</i>	
+	<ul class="b">
+	<li>AWS-based <em>**DONE** sample source code and documentation fulfills this requirement.</em></li>
+	<li>Sample code provided in Terraform <em>**DONE** sample source code and documentation fulfills this requirement.</em></li>
+	</ul>	
+	
+	<p><i>Solution Design</i>
+	<ul class="b">
+	<li>DNS-based service routing: via an ALB listener rule using <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancers-listeners.html#host-conditions">host conditions</a>, this solution determines the correct service backend to route based on the HTTP request host header.</li>
+	<ul class="b">
+	<li>Using existing infrastructure of an ECS cluster, ALB w/single listener, a wildcare Route53 record (*.services.domain.com which is a Route 53 alias record to the ALB) and a service name of 'myapp' of which two versions exist - 1 and 2.</li>
+	<li>With both versions deployed, they can be directly accessed using their URLs, for example:</li>
+	<ul class="b">
+	<li>http://myapp-1.services.domain.com</li> 
+	<li>http://myapp-2.services.domain.com</li>
+	</ul>
+	<li>The active version of the app is http://myapp.services.domain.com, remapping to the appropriate version as needed.</li>
+	</ul>
+	</ul>
+	<ul class="b">
+	<li>Port-based service routing: via two ALB listeners, one active and one inactive, to perform service routing, this approach determines the correct service backend to route based on the TCP port of the request. The active of an application is on an active port (80/443) while the inactive version is accessible on an inactive port (8080/8443).</li>
+	<ul class="b">
+	<li>Using existing infrastructure of an ECS cluster, ALB w/two listeners, one active and one inactive and a service name of 'myapp' of which two versions exist - 1 and 2. </li>
+	<li>With both versions deployed, they can be directly accessed as:</li>
+	<ul class="b">
+	<li>http://myapp.domain.com</li> 
+	<li>http://myapp.domain.com8080</li>
+	</ul>
+	<li>The active version of the app is http://myapp.domain.com, remapping to the appropriate version as needed.</li>	
+
+	
+	<br>
+	<h2>Agile:</h2>	
+		
+	<p><b>Narrative</b> - As a developer, I want Blue/Green Deployment capabilities so that I can manage application deployments with better risk mitigiation for potential application issues.</p>
+	
+	<p><b>Requirements:</b></p> 
+	<ul class="b">
+	<li>Build and publish DNS-based and Port-based solutions</li>
+	<li>Build and publish sample source using Terraform and Python</li>
+	<ul class="b">
+	<li>ECS and ALB in Terraform.</li>
+	<li>Python for target groups, services and listener rules</li>
+	</ul>
+	<li>Publish documentation:</li>
+	</ul>	
+
+	<p><b>Acceptance Criteria:</b></p>
+	<ul class="b">
+	<li>Documentation fulfills all listed requirements.</li>
+	<li>Documentation is peer reviewed.</li>
+	<li>Automated tests have been created and run on Terraform and Python code</li>
+	<li>An early adopter team has successfully used both the DNS-based and Port-bases solutions and provided actionable feedback (if any).</li>
+	</ul>
+
+</div><!-- /.content -->
+
+
+
+ 
