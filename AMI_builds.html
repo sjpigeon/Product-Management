@@ -1,0 +1,125 @@
+---
+layout: default
+title: Scott Pigeon
+---
+<div class="content">
+
+	<h1>AMI Builds</h1>
+	<p>This feature was to provide the enterprise 'base-AMIs' that meet the lowest common denominator for OS functionality across all customers while fulfilling Security standards, thus reducing the operational overhead for both Application Team and SecOps.  
+	
+	<br>
+	<h2>Business Case:</h2>
+		
+	<p><i>What is the customer's strategic benefit?</i>
+	<ul class="b">
+	<li>A standardized and automated build process to create and configure AMIs based on customer requirements.</li>
+	</ul>
+
+	<p><i>What is the problem being solved?</i>
+	<ul class="b">
+	<li>The lack of a standard enables security risk and engineering inefficiency across the MHE Enterprise as teams required to use AMI's lack clear and concise guidance, significantly impeding their ability to build and deploy secure, value-add applications in a repeatable and reliable manner. </li>
+	</ul>
+
+	<p><i>How will the customer benefit?</i>
+	<ul class="b">
+	<li>Centrally produced and published AMIs that meet MHE Security requirements on a regular schedule, and ad-hoc basis, reduce cost and effort of engineering teams building their AMIs.</li>
+	<li>Definition and publication of a standard enables engineering teams across the enterprise to understand the level of quality that's required in AMI's by application teams and SecOps.</li>
+	<li>Knowledge of the AMI production schedule enables engineering teams to plan features and deployments.</li>
+	</ul> 
+
+	<p><i>What is the capability?</i>
+	<ul class="b">
+	<li>Automation for creation and publication of new AMIs per a schedule (and ad-hoc basis as necessary).</li>
+	<li>Documentation and publication of AMI settings.</li>
+	<li>Documentation and publication of the MHE AWS AMI production schedule.</li>
+	</ul>
+	
+	<p><i>What are we doing?</i>
+	<ul class="b">	
+	<li>Assembling a Virtual Team of engineering contacts from application teams and the corporate security team to define the base-AMI Standard.</li>
+	<li>Design and build automation that builds and tests AMIs to meet the base-AMI Standard.</li>
+	<li>Design and implement a process that publishes base-AMIs to engineering teams with AWS Accounts.</li>
+	</ul>
+	
+	<p><i>How are we doing it?</i>
+	<ul class="b">
+	<li>Design and evangelize an AMI Build Process.</li>
+	<li>Create Virtual Teams:</li>
+	<ul class="b">
+	<li>Identify and organize a team of DPG and GTS engineers to define AMI requirements (OS list, OS settings, additional software).</li>
+	<li>Identify and organize a team of application team and security team leaders to review and approve AMI requirements.</li>
+	</ul>
+	<li>Design and build an 'AMI Build Pipeline':</li>
+	<ul class="b">
+	<li>Jenkins - create schedule 'jobs' that run Packer scripts and send status notifications</li>
+	<li>Packer - Configures OS and installs any additional software</li>
+	<li>Packer - Runs tests to verify OS and additional software</li>
+	<li>Packer - Publish AMIs to AWS Accounts</li>
+	</ul>
+	</ul>
+
+	
+	
+	<br>
+	<h2>Solutioning:</h2>
+	<p><i>Problem Statements(Prioritized)</i>
+	<ul class="b">
+	<li>Application teams build their own AMI's, duplicating efforts across the enterprise.</li>
+	<li>Application teams are unaware of the complete list of security requirements.</li>
+	</ul>
+	
+	
+	<p><i>Requirements/Scenarios(Prioritized)</i>
+	<ul class="b">
+	<li>Builds an AMI from a Packer template such that it is available only in one account.</li>
+	<li>Runs AMI specific tests against that AMI. The content of these tests is controlled by whomever owns the Packer template for this specific AMI. If this fails, pipeline ends here.</li>
+	<li>Runs generic tests (e.g. universal security checks) against the AMI - these tests are controlled by security/IT. If this fails, pipeline ends here.</li>
+	<li>Distributes AMIs to select AWS accounts.</li>
+	</ul>
+	
+	<br>
+	<h2>Agile:</h2>	
+		
+	<p><b>Narrative</b> - As an application team, I need a centralized, pipeline that builds secure AMIs so that I can focus on building my application.</p>
+	
+	<p><b>Requirements:</b></p> 
+	<ul class="b">
+	<li>The pipeline input is a single git repository which contains components:</li>
+	<ul class="b">
+	<li>Packer template (and associated files, scripts, etc) referencing a source AMI.</li>
+	<li>A set of tests written in Python to be consumed by test infrastructure which can be run against a host instantiated from this AMI.</li>
+	<li>A Jenkinsfile which uses AMI Builder to run build/test stages. The tests at this stage should validate:</li>
+	<ul class="b">
+	<li>Required expected settings from the source AMI (from AWS MarketPlace) are present (e.g., the base centos7 AMI tests could verify that the OS is actually centos7)</li>
+	<li>The actions performed by Packer functioned as expected (e.g., if Packer installed and enabled a service - validate that it is running).</li>
+	</ul>
+	
+	<li>Pipeline Stages - Build:</li>
+	<ul class="b">	
+	<li>AMI Builder is called to build the AMI. amibuilder discovers default vpc, subnet, security group for packer and calls packer with relevant arguments - the packer template can be generic with respect to vpc/subnet/sg details. At this point the AMI is only usable in a single account.</li>
+	</ul>
+	<li>Pipeline Stages - Test:</li>
+	<ul class="b">	
+	<li>AMI Builder is called to test the AMI using the AMI-specific test suite.  amibuilder creates a temporary key, spins up a temporary instance using the built AMI and temporary key and runs the testinfra test suite against the temporary instance.  If any tests fail, the AMI is destroyed.</li>
+	</ul>
+	<li>Pipeline Stages - Distribute:</li>
+	<ul class="b">	
+	<li>AMI Builder is called to distribute the AMI to a list of accounts. This account list could be variable input or it could be hard-coded into the it/security controlled pipeline.</li>
+	</ul>
+	</ul>
+	</ul>
+	
+	<p><b>Acceptance Criteria:</b></p>
+	<ul class="b">
+	<li>The Jenkins pipeline that builds the AMI is fully automated.</li>
+	<li>The V-Teams have reviewed and approved of the process of building, testing and distributing the base-AMI.</li>
+	<li>Comprehensive tests are written and run for both the AMI itself, as well as AMI Builder.</li>
+	<li>Distribution of AMI's is limited to a specific list of accounts.</li>
+	</ul>
+
+
+</div><!-- /.content -->
+
+
+
+ 
